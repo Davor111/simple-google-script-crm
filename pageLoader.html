@@ -1,0 +1,20 @@
+<script>
+
+// page will load completely new
+function pageLoad(page, username, id, callback){
+       google.script.run.withSuccessHandler(function(x) { 
+            $("#mainBody").html(x + "<p id='username' hidden>" + username + "<p>"); $("#logger").text(id); callback() 
+            })
+       .loadFile(page);
+
+}
+
+// just gives the HTML Code back
+function giveCode(page, callback) {
+      google.script.run.withSuccessHandler(function(x) { callback(x)}).loadFile(page);
+
+}
+
+
+
+</script>

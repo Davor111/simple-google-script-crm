@@ -1,0 +1,189 @@
+<h1>Hi</h1>
+<p>Here are all clients:</p>
+<div class="row">
+    <div class="col-sm-7">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <input type="text" placeholder="Press enter to search" class="form-control" id="realSearch">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <button type="button" id="searchBut" class="btn btn-info bottom-align">Search</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div hidden style="background-color: white;">
+            Test
+        </div>
+        <div id="result" class="table-responsive searchBox">
+
+
+            <table id="thetable" class="table table-hover sortable">
+                <tr>
+                    <th>Name:</th>
+                    <th>Address:</th>
+                    <th>Consultant:</th>
+                </tr>
+                <tr>
+
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="form-group">
+            <button type="button" id="addUser" onclick="emptyAll()" class="btn btn-info btn-lg bottom-align">Add Client</button>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div hidden id="hideDetails" class="panel panel-default">
+            <div id="details" class="panel-body"> </div>
+            <div class="row panel-body">
+
+                <div class="col-sm-3">
+
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                            E-Mail Client <span class="caret"></span></button>
+                    <ul class="dropdown-menu" style="cursor: pointer;" role="menu">
+                        <li><a onclick="alert('Easy integration for Gmail to send E-Mails right from the Web App. Left out, because it requires a Google account')">send E-Mail</a></li>
+                        <li><a onclick="alert('Easy integration for Gmail to send E-Mails right from the Web App. Left out, because it requires a Google account')">send all open bills</a></li>
+                        <li><a onclick="alert('Easy integration for Gmail to send E-Mails right from the Web App. Left out, because it requires a Google account')">send offer</a></li>
+                    </ul>
+
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" id="editUser" class="btn btn-default">Edit Client</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" id="editUser" data-trigger="focus" data-placement="top" data-toggle="popover" title="Are you sure to delete this client?"
+                        data-html="true" data-content='<button type="button" onclick="deleteClient()" class="btn btn-danger">Yes</button> <button type="button" class="btn btn-info pull-right">No</button> '
+                        class="btn btn-danger pull-right">Delete Client</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="addClientPopUp"> </div>
+
+
+
+
+<script>
+    //document ready
+$(function() {
+     $("h1").text('Hi ' + $("#username").text() + "!");
+     refreshList();
+     $('[data-toggle="popover"]').popover(); 
+});
+  
+
+
+function refreshList() {
+   google.script.run.withSuccessHandler(function(x) { 
+                    makeList(x, function() {
+                        var newTableObject = document.getElementById("thetable"); 
+                        sorttable.makeSortable(newTableObject);
+                        }) 
+   }).getClientList()
+   $("#hideDetails").hide(); 
+}
+  
+function makeList(clientData, callback) {
+
+     $('#thetable tbody thead').html("");
+     var html = '';
+     for(var i = 0; i < clientData.length; i++){
+            html += '<tr onclick="showDetails(' + clientData[i].id + ')"><td>' + clientData[i].name + '</td><td>' + clientData[i].address + '</td>' + '<td>' + clientData[i].consultant + '</td> </tr>' //' <p hidden>' + clientData[i].id + '</p>';
+     }
+     $('#thetable').html("<tr><th>Name:</th><th>Address:</th><th>Consultant:</th> </tr>");
+     $('#thetable tbody').append(html);
+
+     callback(); 
+   
+}
+    
+
+    
+
+    
+// adds details box to the right    
+function showDetails(id) {
+  google.script.run.withSuccessHandler(function(x) {onSuccess(x) }).searchStudent(id, "0")
+  
+          function onSuccess(result) {
+          $("#hideDetails").hide(); 
+          $("#details").html(
+          "<h3><b>Client Info:</b></h3>" +
+            "<div class ='table-responsive'><table border='0' class='table' style='border-top: 1px solid #fff'><tr><td ><b>Name:</b></td> " + "<td>" + result[1] + "</td> <td>" +
+            "<b>Address:</b> " + "</td> <td>" + result[2] + "<br> " + result[3]+ " " + result[4] + "</td></tr>" +
+            "<tr> <td> <b>Country:</b> </td> <td>" + result[5] + "</td> <td>" + "<b>Consultant:</b> " + "</td> <td>" + result[7] +
+            "</td> </tr><tr><td><b>Telephone:</b></td><td>" + result[9] + "</td><td> <b>E-Mail:</td><td>" + result[10] + "</td></tr></table> </div> </div>" + "<p hidden id='restID'>" + result[0] + "</p> " + 
+            "<div class='comment'><p class='results'><b>Comment:</b> <br>" + result[6] + "</p></div>" 
+          )
+          
+          $("#hideDetails").fadeIn();
+          }
+  };
+  
+  
+  
+ // not used yet
+ function showDetail(id) {
+ $("#hideDetails").hide(); 
+  google.script.run.withSuccessHandler(function(x) {onSuccess(x) }).searchStudent(id, "0");
+  
+      function onSuccess(result) {
+      
+ 
+      }
+ };
+ 
+ 
+
+ 
+ 
+ function deleteClient() {
+        var id = $("#restID").text();
+        google.script.run.withSuccessHandler(function(x){refreshList();}).deleteClient(id)
+        
+};
+ 
+ 
+$("#searchBut").click(function(){
+     google.script.run.withSuccessHandler(function(x){
+       makeList(x, function() {var newTableObject = document.getElementById("thetable"); sorttable.makeSortable(newTableObject);})})
+       .searchStudent($("#realSearch").val(), "1")
+
+});
+
+
+
+$('#realSearch').keypress(function (e) { 
+     if (e.which == 13) { 
+         $("#searchBut").trigger("click");
+     }
+});
+
+
+
+ 
+//adds code to page 
+ giveCode('modals', function(html) {
+        $("#addClientPopUp").html(html);
+ });
+
+</script>

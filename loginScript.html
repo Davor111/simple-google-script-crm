@@ -1,0 +1,76 @@
+<script>
+
+// Create new User
+  $("#createUser").submit(function(e){
+    e.preventDefault();
+    
+    var username = $("#username").val();
+    var pwd = $("#pwd").val();
+    
+    if(pwd && username){
+    waitingDialog.show();
+    google.script.run.withSuccessHandler(function(x){onSuccess(x)}).saveUser(username, pwd)
+      
+    }else {
+             if(!pwd){
+                     $("#pwdError").addClass("has-error has-feedback")
+             }
+             
+             if(!username){
+                     $("#userError").addClass("has-error has-feedback") 
+             }
+    }
+function onSuccess(id) {
+ 
+pageLoad('mainPage', username, id, function(){
+   waitingDialog.hide();
+   });
+}
+   
+});
+
+
+
+// User login 
+
+$("#createUserLog").submit(function(e){
+    e.preventDefault();
+    
+    var username = $("#usernameLog").val();
+    var pwd = $("#pwdLog").val();
+    
+    if(pwd && username){
+     google.script.run.withSuccessHandler(function(x) {onSucc(x)}).checkPassword(username, pwd)
+     
+     function onSucc(user){
+     if(!user) {alert("Wrong Username or Password")}else {
+        waitingDialog.show();
+        pageLoad('mainPage', user[0], user[2], function(){
+        waitingDialog.hide();
+         });
+         }
+    }
+    
+    }else {
+             if(!pwd){
+                     $("#pwdErrorLog").addClass("has-error has-feedback")
+             }
+             
+             if(!username){
+                     $("#userErrorLog").addClass("has-error has-feedback") 
+             }
+    }
+   
+});
+
+
+
+
+
+
+//for DEV PURPOSES. Skips the login
+//pageLoad('mainPage', "admin", "0", function(){});
+
+</script>
+
+

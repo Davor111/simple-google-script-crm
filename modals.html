@@ -1,0 +1,278 @@
+<!-- Add Client Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="emptyAll()" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add a client:</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="name">Name:*</label>
+                    <input type="text" class="form-control" id="name">
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="telephone">Telephone:</label>
+                            <input type="text" class="form-control" id="telephone">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="email">E-Mail:</label>
+                            <input type="text" class="form-control" id="email">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="addresse">Address:* (Hit <b>enter</b> to verify address)</label>
+                    <input placeholder="Put in address, PLZ, city.." list="addSuggestion" type="text" class="form-control" id="addresse">
+
+                    <datalist id="addSuggestion">
+        
+      </datalist>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="plz">PLZ:*</label>
+                            <input type="text" class="form-control" id="plz" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+
+                        <div class="form-group">
+                            <label for="city">City:*</label>
+                            <input type="text" class="form-control" id="city" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+                            <label for="country">Country:*</label>
+                            <input type="text" class="form-control" id="country" disabled>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                </div>
+                <button type="submit" id="addClient" class="btn btn-default buttonHide">Save</button>
+                <div id="myAlert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="emptyAll()" data-dismiss="modal">Close</button>
+
+                <p id="edit" hidden> </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<script>
+    // Address validation first part, when enter is pressed:
+$('#addresse').keypress(function (e) {
+
+    $('#plz').val("");
+    $('#city').val("");
+    $('#country').val("");
+
+    if (e.which == 13) {
+        var addresse = $("#addresse").val();
+        $('#plz').val("");
+        $('#city').val("");
+        $('#country').val("");
+
+        google.script.run.withSuccessHandler(function (x) { addSug(x.results) }).getGeoData(addresse);
+
+        function addSug(result) {
+            $("#addSuggestion").empty();
+            var val = $('#addresse').val();
+            $('#addresse').val(val.substr(0, 1))
+            var i = 0;
+            //appends datalist entry for autocomplete
+            if (result[0]) {
+                for (i; i < result.length && i < 9; i++) {
+                    $("#addSuggestion").append("<option value='" +   
+                        result[i].formatted_address + "'></option>");
+                }
+            }
+
+        }
+    }
+});
+  
+
+// second part of validation. When user clicks on datalist entry
+$("#addresse").on('input', function () {
+     //deletes result, so user cannot add a new address after validation
+     $('#plz').val("");
+     $('#city').val("");
+     $('#country').val("");
+   
+    var val = this.value;
+    if($('#addSuggestion option').filter(function(){
+        return this.value === val;        
+    }).length) {
+       //when input matches datalist entry, fill in form
+       var str = this.value.split(",");
+  
+        $('#addresse').val(str[0]);
+        $('#plz').val(str[1].toString().substr(1,5));
+        $('#city').val(str[1].toString().substr(7));
+        $('#country').val(str[2].toString().substr(1));
+        $("#addSuggestion").empty();
+    } 
+});
+
+
+//add Client
+$("#addUser").click( function() {
+  $(".modal-title").text("Add a new Client"); //changes
+  $("#edit").text("add"); //changes text of p, so the right func is triggered 
+  $("#myModal").modal();
+
+})
+
+
+$("#addClient").click(function() {
+
+if($("#edit").text() == "edit") {
+    editClient();
+}else{
+var client = {
+    address :  $('#addresse').val(),
+    plz :      $('#plz').val(),
+    city :     $('#city').val(),
+    name :     $('#name').val(),
+    comment :  $('#comment').val(),
+    country :    $('#country').val(),
+    consultant : $('#username').text(),
+    consultantID : $('#logger').text(),
+   
+    telephone : $('#telephone').val(),
+    email : $('#email').val()
+   
+   }
+   
+   if(client.name && client.plz && client.address) {
+   
+        google.script.run.withSuccessHandler(function(x) {alertPopup(x)}).addNewClient(client)
+       
+   }else{
+   alert("Not filled in all info")
+   } 
+
+ }
+});
+
+
+
+// Edit Client
+
+ $("#editUser").click(function() {
+ $("#edit").text("edit") //changes function;
+ $(".modal-title").text("Edit this Client")
+
+ google.script.run.withSuccessHandler(function(client){setModal(client)}).searchStudent($("#restID").text(), "idNiceFormat");
+
+function setModal(client) {
+   $('#addresse').val(client[0].address);
+   $('#plz').val(client[0].plz);
+   $('#city').val(client[0].city);
+   $('#name').val(client[0].name);
+   $('#comment').val(client[0].comment);
+   $('#country').val(client[0].country);
+   
+   $('#telephone').val(client[0].telephone);
+   $('#email').val(client[0].email);
+   $("#myModal").modal();
+}
+
+
+});
+
+
+
+function editClient() {
+
+var client = {
+    address :  $('#addresse').val(),
+    plz :      $('#plz').val(),
+    city :     $('#city').val(),
+    name :     $('#name').val(),
+    comment :  $('#comment').val(),
+    country :    $('#country').val(),
+    consultant : $('#username').text(),
+    consultantID : $('#logger').text(),
+   
+    telephone : $('#telephone').val(),
+    email : $('#email').val(),
+    id: $("#restID").text()
+   
+   }
+  
+   if(client.name && client.plz && client.address) {
+   
+         google.script.run.withSuccessHandler(function(x) {alertPopup(x)}).editClient(client)
+     
+   }else{
+   alert("Not filled in all info")
+   } 
+
+};
+
+
+//make alert appear
+
+function alertPopup(message) {
+
+      $(".buttonHide").hide();
+        
+        $("#myAlert").html(
+            '<div class="alert alert-info" style="margin-top: 25px">' + message + '</div>'
+        )
+        $("#myAlert").fadeIn();
+        setTimeout(function () { $(".close").click();}, 3000); //gives user time to read message
+        
+        refreshList();
+
+
+};
+
+
+// Standard  modal stuff. On close empty all forms, etc...
+
+function emptyAll() {
+$(".form-control").val(""); 
+ $(".buttonHide").show();
+ $("#myAlert").hide();
+   
+
+}; 
+
+$('#myModal').on('hidden.bs.modal', function () {
+  emptyAll(); 
+});
+
+</script>
