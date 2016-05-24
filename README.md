@@ -16,4 +16,4 @@ Address validation works only for German addresses as this was built for a Germa
 
 Click on 'Add Client' to see it.  
 
-Working demo: https://script.google.com/macros/s/AKfycbxmKpY-XdpghpKH6yUda2CnrV0II2BMqb-2196O73he/dev
+Working demo: https://script.google.com/macros/s/AKfycbzi2OzIZa9Z3J_c77qJIdfc4MzDX_mZCY1V9xCLK1jCVrjtgMGj/exec
