@@ -15,3 +15,5 @@ This feautres address validation via the built in Google Maps Geocoder API.
 Address validation works only for German addresses as this was built for a German company. 
 
 Click on 'Add Client' to see it.  
+
+Working demo: https://script.google.com/macros/s/AKfycbxmKpY-XdpghpKH6yUda2CnrV0II2BMqb-2196O73he/dev
