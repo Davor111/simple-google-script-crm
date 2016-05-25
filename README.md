@@ -11,7 +11,7 @@ https://docs.google.com/spreadsheets/d/THIS_IS_YOUR_ID
 Give it access to your Drive Account when asked. 
 IMPORTANT: leave the first row BLANK or provide row names like "id, name, address, etc" for your data. 
 
-This feautres address validation via the built in Google Maps Geocoder API. 
+This features address validation via the built in Google Maps Geocoder API. 
 Address validation works only for German addresses as this was built for a German company. 
 
 Click on 'Add Client' to see it.  
