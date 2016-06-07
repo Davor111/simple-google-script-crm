@@ -124,7 +124,7 @@ $('#addresse').keypress(function (e) {
 });
   
 
-// second part of validation. When user clicks on datalist entry in autocomplete
+// second part of validation. When user clicks on datalist entry
 $("#addresse").on('input', function () {
      //deletes result, so user cannot add a new address after validation
      $('#plz').val("");
@@ -144,13 +144,16 @@ $("#addresse").on('input', function () {
         
        function addAddressData (results) {
    
-          // needed to parse geocoder data. Otherwise it is too unreliable and returns undefine
+          // needed to parse geocoder data. Otherwise it is too unreliable 
           var address_components = results.address_components;
           var components={};
           jQuery.each(address_components, function(k,v1) {jQuery.each(v1.types, function(k2, v2){components[v2]=v1.long_name});});
           //   
-           var number = components.street_number || "and no street number" 
-           $('#addresse').val(components.route || "No Address" + " " + number);
+          
+           var number = components.street_number || "(no street number)";
+           var add = components.route || "No Address" ;
+           
+           $('#addresse').val(add + " " + number);
            $('#plz').val(components.postal_code);
            $('#city').val(components.locality);
            $('#country').val(components.country);
