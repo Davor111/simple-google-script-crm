@@ -12,7 +12,8 @@ Give it access to your Drive Account when asked.
 IMPORTANT: leave the first row BLANK or provide row names like "id, name, address, etc" for your data. 
 
 This features address validation via the built in Google Maps Geocoder API. 
-Address validation works best for German addresses as this was built for a German company.  **UPDATE**: I've reworked the address validation. All types of addresses are supported now. 
+Address validation works best for German addresses as this was built for a German company.  
+   **UPDATE**: I've reworked the address validation. All types of addresses are supported now. 
 
 Click on 'Add Client' to see it.  
 
