@@ -1,96 +1,97 @@
 <!-- Add Client Modal -->
 <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+  <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" onclick="emptyAll()" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add a client:</h4>
-            </div>
-            <div class="modal-body">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick= "emptyAll()" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add a client:</h4>
+      </div>
+      <div class="modal-body">
+      
+         <div class="form-group">
+    <label for="name">Name:*</label>
+    <input type="text" class="form-control" id="name">
+  </div>
+  
+  <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+               <label for="telephone">Telephone:</label>
+               <input type="text" class="form-control" id="telephone">
+        </div>
+      </div>
+      
+       <div class="col-sm-6">
+        <div class="form-group">
+               <label for="email">E-Mail:</label>
+               <input type="text" class="form-control" id="email">
+        </div>
+      </div>
+      
+  </div>
+  
+  <div class="form-group">
+    <label for="addresse">Address:* (Hit <b>enter</b> to verify address)</label>
+    <input placeholder="Put in address, PLZ, city.." list="addSuggestion" type="text" class="form-control" id="addresse">
 
-                <div class="form-group">
-                    <label for="name">Name:*</label>
-                    <input type="text" class="form-control" id="name">
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="telephone">Telephone:</label>
-                            <input type="text" class="form-control" id="telephone">
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="email">E-Mail:</label>
-                            <input type="text" class="form-control" id="email">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="form-group">
-                    <label for="addresse">Address:* (Hit <b>enter</b> to verify address)</label>
-                    <input placeholder="Put in address, PLZ, city.." list="addSuggestion" type="text" class="form-control" id="addresse">
-
-                    <datalist id="addSuggestion">
+      <datalist id="addSuggestion">
         
       </datalist>
-
-
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label for="plz">PLZ:*</label>
-                            <input type="text" class="form-control" id="plz" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-
-                        <div class="form-group">
-                            <label for="city">City:*</label>
-                            <input type="text" class="form-control" id="city" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-
-                        <div class="form-group">
-                            <label for="country">Country:*</label>
-                            <input type="text" class="form-control" id="country" disabled>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea class="form-control" rows="5" id="comment"></textarea>
-                </div>
-                <button type="submit" id="addClient" class="btn btn-default buttonHide">Save</button>
-                <div id="myAlert">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" onclick="emptyAll()" data-dismiss="modal">Close</button>
-
-                <p id="edit" hidden> </p>
-            </div>
-        </div>
-
+    
+    
+  </div>
+  
+<div class="row">
+ <div class="col-sm-3">
+    <div class="form-group">
+       <label for="plz">PLZ:*</label>
+       <input type="text" class="form-control" id="plz" disabled>
     </div>
+ </div>
+   <div class="col-sm-5">
+ 
+    <div class="form-group">
+    <label for="city">City:*</label>
+    <input type="text" class="form-control" id="city" disabled>
+    </div>
+  </div>
+  
+     <div class="col-sm-4">
+ 
+    <div class="form-group">
+    <label for="country">Country:*</label>
+    <input type="text" class="form-control" id="country" disabled>
+    </div>
+  </div>
+  
+</div>
+
+<div class="form-group">
+  <label for="comment">Comment:</label>
+  <textarea class="form-control" rows="5" id="comment"></textarea>
+</div>
+  <button type="submit" id = "addClient" class="btn btn-default buttonHide">Save</button>
+        <div id="myAlert">
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick= "emptyAll()" data-dismiss="modal">Close</button>
+    
+    <p id="edit" hidden> </p>
+    </div>
+    </div>
+
+  </div>
 </div>
 
 
 
 
 <script>
-    // Address validation first part, when enter is pressed:
+
+// Address validation first part, when enter is pressed:
 $('#addresse').keypress(function (e) {
 
     $('#plz').val("");
@@ -123,7 +124,7 @@ $('#addresse').keypress(function (e) {
 });
   
 
-// second part of validation. When user clicks on datalist entry
+// second part of validation. When user clicks on datalist entry in autocomplete
 $("#addresse").on('input', function () {
      //deletes result, so user cannot add a new address after validation
      $('#plz').val("");
@@ -134,14 +135,30 @@ $("#addresse").on('input', function () {
     if($('#addSuggestion option').filter(function(){
         return this.value === val;        
     }).length) {
-       //when input matches datalist entry, fill in form
+       //when input matches datalist entry, fill in form. 
        var str = this.value.split(",");
-  
-        $('#addresse').val(str[0]);
-        $('#plz').val(str[1].toString().substr(1,5));
-        $('#city').val(str[1].toString().substr(7));
-        $('#country').val(str[2].toString().substr(1));
-        $("#addSuggestion").empty();
+       
+
+    google.script.run.withSuccessHandler(function (x) { addAddressData(x.results[0]) }).getGeoData(this.value);
+
+        
+       function addAddressData (results) {
+   
+          // needed to parse geocoder data. Otherwise it is too unreliable and returns undefine
+          var address_components = results.address_components;
+          var components={};
+          jQuery.each(address_components, function(k,v1) {jQuery.each(v1.types, function(k2, v2){components[v2]=v1.long_name});});
+          //   
+           var number = components.street_number || "and no street number" 
+           $('#addresse').val(components.route || "No Address" + " " + number);
+           $('#plz').val(components.postal_code);
+           $('#city').val(components.locality);
+           $('#country').val(components.country);
+           $("#addSuggestion").empty();
+   
+   } 
+    
+        
     } 
 });
 
@@ -243,6 +260,8 @@ var client = {
 };
 
 
+
+
 //make alert appear
 
 function alertPopup(message) {
@@ -259,6 +278,9 @@ function alertPopup(message) {
 
 
 };
+
+
+
 
 
 // Standard  modal stuff. On close empty all forms, etc...
